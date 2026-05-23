@@ -1,0 +1,30 @@
+[project]
+name = "py-res-w7-some1rxndom"
+version = "0.1.0"
+requires-python = ">=3.13"
+authors = [
+  { name = "valerie", email = "valerie@ouppy.gay" },
+]
+dependencies = [
+  "httpx[http2]>=0.28.1",
+  "pydantic>=2.13.4",
+  "pyside6>=6.11.1",
+  "qasync>=0.28.0",
+]
+
+[project.scripts]
+py-res-w7-some1rxndom = "py_res_w7_some1rxndom:main"
+
+[build-system]
+requires = ["uv_build>=0.11.14,<0.12.0"]
+build-backend = "uv_build"
+
+[tool]
+[tool.pyside6-project]
+files = [
+  ".python-version",
+  "src/py_res_w7_some1rxndom/__init__.py",
+  "src/py_res_w7_some1rxndom/main.css",
+  "src/py_res_w7_some1rxndom/main.py",
+  "uv.lock",
+]

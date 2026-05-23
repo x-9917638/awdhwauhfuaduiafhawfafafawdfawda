@@ -1,0 +1,27 @@
+/* Literally the only reason for this seperate file is the syntax highlighting :3  */
+
+QWidget#StoryWidget QLabel#title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+QWidget#StoryWidget QLabel#normal {
+    font-size: 16px;
+}
+
+QWidget#StoryWidget QLabel#normal:link {
+    color: #33a7ff;
+}
+
+QWidget#StoryWidget QLabel#normal:linkvisited {
+    color: #9810fa;
+}
+
+QWidget * {
+    background-color: #333;
+    color: white;
+}
+
+QWidget#App {
+    background-color: #333;
+}
