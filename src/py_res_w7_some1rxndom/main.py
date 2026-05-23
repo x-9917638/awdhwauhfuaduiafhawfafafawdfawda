@@ -1,5 +1,4 @@
 import asyncio
-import os
 import random
 import sys
 from collections import Counter
@@ -48,6 +47,11 @@ QWidget * {
 
 QWidget#App {
     background-color: #333;
+}
+
+QMessageBox {
+    background-color: #333;
+    color: white;
 }
 """
 DATA_PATH = Path(f"data_{__package__ or 'hn_gui'}.json")
@@ -119,6 +123,7 @@ class App(QWidget):
         super().__init__()
 
         self.httpclient = AsyncClient()
+        self.in_progress = False
         self.stories: list[Story] = []
         self.story_widgets: dict[Story, StoryWidget] = {}
         self.story_type = StoryType.New
@@ -145,7 +150,22 @@ class App(QWidget):
         story_choice.currentIndexChanged.connect(update_story_type)
 
         fetch_button = QPushButton("Fetch Articles", self)
-        fetch_button.clicked.connect(self.fetch_stories)
+
+        def __button_callback() -> None:
+            tasks = set()
+            if self.in_progress:
+                QMessageBox(
+                    QMessageBox.Icon.Information,
+                    "INFO",
+                    "Articles are alrady being fetched!",
+                    parent=self,
+                ).exec()
+                return
+            task = asyncio.ensure_future(self.fetch_stories())
+            tasks.add(task)
+            task.add_done_callback(tasks.remove)
+
+        fetch_button.clicked.connect(__button_callback)
 
         self.load_data()
 
@@ -195,6 +215,8 @@ class App(QWidget):
             meows = ["meow", "mrrp", "mrow", "meowowowow"]
             QInputDialog.getItem(self, "meow?", "", meows)
 
+        self.in_progress = True
+
         stories = [
             Story(**raw)
             async for raw in (
@@ -209,8 +231,8 @@ class App(QWidget):
                 )
             )
         ]
-
         self.render_stories(stories)
+        self.in_progress = False
 
     def on_close(self) -> None:
         with DATA_PATH.open("wb") as w:

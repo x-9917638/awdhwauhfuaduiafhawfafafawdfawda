@@ -25,3 +25,8 @@ QWidget * {
 QWidget#App {
     background-color: #333;
 }
+
+QMessageBox * {
+    background-color: #333;
+    color: white;
+}
